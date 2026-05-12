@@ -1,0 +1,1276 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Taxi Đà Nẵng 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --taxi-orange: #FF6B00;
+            --taxi-yellow: #FFC107;
+            --taxi-dark: #1a1a1a;
+            --taxi-light: #f8f9fa;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f0f2f5;
+            color: var(--taxi-dark);
+        }
+
+        /* LOGIN */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--taxi-orange) 0%, #FF8E00 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+            .login-box h1 {
+                color: var(--taxi-orange);
+                margin-bottom: 0.5rem;
+                font-size: 1.8rem;
+            }
+
+            .login-box p {
+                color: #666;
+                margin-bottom: 2rem;
+            }
+
+            .login-box input {
+                width: 100%;
+                padding: 1rem;
+                border: 2px solid #e0e0e0;
+                border-radius: 10px;
+                font-size: 1rem;
+                margin-bottom: 1rem;
+                text-align: center;
+                letter-spacing: 2px;
+            }
+
+                .login-box input:focus {
+                    outline: none;
+                    border-color: var(--taxi-orange);
+                    box-shadow: 0 0 0 3px rgba(255,107,0,0.1);
+                }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--taxi-orange);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .login-btn:hover {
+                background: #E55A00;
+                transform: translateY(-2px);
+            }
+
+        .login-error {
+            color: var(--danger);
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* LAYOUT */
+        .app {
+            display: none;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 260px;
+            background: var(--taxi-dark);
+            color: white;
+            padding: 1.5rem;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #333;
+            margin-bottom: 1.5rem;
+        }
+
+            .sidebar-header i {
+                font-size: 2rem;
+                color: var(--taxi-orange);
+            }
+
+            .sidebar-header h2 {
+                font-size: 1.2rem;
+            }
+
+            .sidebar-header span {
+                font-size: 0.75rem;
+                color: #aaa;
+            }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+            .nav-menu li {
+                margin-bottom: 0.5rem;
+            }
+
+            .nav-menu a {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 0.9rem 1rem;
+                border-radius: 10px;
+                color: #aaa;
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s;
+                cursor: pointer;
+            }
+
+                .nav-menu a:hover, .nav-menu a.active {
+                    background: rgba(255,107,0,0.15);
+                    color: var(--taxi-orange);
+                }
+
+                .nav-menu a i {
+                    width: 24px;
+                    text-align: center;
+                }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+            .top-bar h1 {
+                font-size: 1.8rem;
+            }
+
+        .top-bar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .refresh-btn {
+            background: var(--taxi-orange);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+            .refresh-btn:hover {
+                background: #E55A00;
+            }
+
+            .refresh-btn.spin i {
+                animation: spin 1s linear infinite;
+            }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* STATS CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-left: 4px solid var(--taxi-orange);
+        }
+
+            .stat-card.success {
+                border-left-color: var(--success);
+            }
+
+            .stat-card.warning {
+                border-left-color: var(--warning);
+            }
+
+            .stat-card.info {
+                border-left-color: var(--info);
+            }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .stat-card .stat-icon {
+            background: rgba(255,107,0,0.1);
+            color: var(--taxi-orange);
+        }
+
+        .stat-card.success .stat-icon {
+            background: rgba(40,167,69,0.1);
+            color: var(--success);
+        }
+
+        .stat-card.warning .stat-icon {
+            background: rgba(255,193,7,0.1);
+            color: var(--warning);
+        }
+
+        .stat-card.info .stat-icon {
+            background: rgba(23,162,184,0.1);
+            color: var(--info);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* TABLE */
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .card-header h3 {
+                font-size: 1.1rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+        .card-body {
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--taxi-light);
+            padding: 1rem 1.2rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge-status {
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .status-moi {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .status-xacnhan {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+
+        .status-dangdon {
+            background: #FFF9C4;
+            color: #F57F17;
+        }
+
+        .status-hoanthanh {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .status-huy {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .status-thuexe {
+            background: #F3E5F5;
+            color: #7B1FA2;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+        }
+
+        .btn-edit {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+
+            .btn-edit:hover {
+                background: #1565C0;
+                color: white;
+            }
+
+        .btn-done {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+            .btn-done:hover {
+                background: #2E7D32;
+                color: white;
+            }
+
+        .btn-cancel {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+            .btn-cancel:hover {
+                background: #C62828;
+                color: white;
+            }
+
+        /* FLEET MANAGEMENT */
+        .fleet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .fleet-card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+            .fleet-card:hover {
+                border-color: var(--taxi-orange);
+                transform: translateY(-3px);
+            }
+
+            .fleet-card h4 {
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .fleet-card .seats {
+                color: #666;
+                font-size: 0.85rem;
+                margin-bottom: 1rem;
+            }
+
+        .fleet-input {
+            width: 100%;
+            padding: 0.7rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            margin-bottom: 0.8rem;
+        }
+
+            .fleet-input:focus {
+                outline: none;
+                border-color: var(--taxi-orange);
+            }
+
+        .fleet-save {
+            width: 100%;
+            padding: 0.7rem;
+            background: var(--taxi-orange);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .fleet-save:hover {
+                background: #E55A00;
+            }
+
+        /* SECTIONS */
+        .section {
+            display: none;
+        }
+
+            .section.active {
+                display: block;
+            }
+
+        /* FILTER BAR */
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+            .filter-bar input, .filter-bar select {
+                padding: 0.7rem 1rem;
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                font-family: inherit;
+                font-size: 0.9rem;
+            }
+
+                .filter-bar input:focus, .filter-bar select:focus {
+                    outline: none;
+                    border-color: var(--taxi-orange);
+                }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--taxi-dark);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 9999;
+            font-weight: 600;
+        }
+
+            .toast.show {
+                display: flex;
+                animation: slideUp 0.3s ease;
+            }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+        }
+
+            .modal-overlay.show {
+                display: flex;
+            }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+            .modal h3 {
+                margin-bottom: 1.5rem;
+            }
+
+        .modal-row {
+            margin-bottom: 1rem;
+        }
+
+            .modal-row label {
+                display: block;
+                margin-bottom: 0.4rem;
+                font-weight: 600;
+                font-size: 0.9rem;
+            }
+
+            .modal-row input, .modal-row select, .modal-row textarea {
+                width: 100%;
+                padding: 0.8rem;
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                font-family: inherit;
+            }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+            .modal-actions button {
+                flex: 1;
+                padding: 0.8rem;
+                border-radius: 8px;
+                font-weight: 700;
+                cursor: pointer;
+                border: none;
+            }
+
+        .modal-save {
+            background: var(--taxi-orange);
+            color: white;
+        }
+
+        .modal-cancel {
+            background: #eee;
+            color: #333;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+
+                .sidebar.open {
+                    transform: translateX(0);
+                }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .fleet-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <base target="_blank">
+    <base target="_blank">
+    <base target="_blank">
+</head>
+<body>
+    <!-- LOGIN -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <img src="https://i.ibb.co/21kQK3zL/Logo.png" alt="Logo" style="width:80px;height:80px;border-radius:16px;margin-bottom:1rem;object-fit:cover;">
+            <h1>Taxi Đà Nẵng</h1>
+            <p>Trang quản trị dành cho Admin</p>
+            <input type="text" id="adminUser" placeholder="Tên đăng nhập" style="margin-bottom:0.5rem;">
+            <input type="password" id="adminPass" placeholder="Mật khẩu" maxlength="50">
+            <button class="login-btn" onclick="doLogin()">
+                <i class="fas fa-sign-in-alt"></i> Đăng nhập
+            </button>
+            <div class="login-error" id="loginError">Sai tên đăng nhập hoặc mật khẩu!</div>
+        </div>
+    </div>
+
+    <!-- APP -->
+    <div class="app" id="app">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="https://i.ibb.co/21kQK3zL/Logo.png" alt="Logo" style="width:40px;height:40px;border-radius:8px;object-fit:cover;">
+                <div>
+                    <h2>ADMIN PANEL</h2>
+                    <span>Taxi Đà Nẵng 2026</span>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li>
+                    <a class="active" onclick="showSection('dashboard')">
+                        <i class="fas fa-chart-line"></i> Tổng quan
+                    </a>
+                </li>
+                <li>
+                    <a onclick="showSection('bookings')">
+                        <i class="fas fa-calendar-check"></i> Đơn đặt xe
+                    </a>
+                </li>
+                <li>
+                    <a onclick="showSection('fleet')">
+                        <i class="fas fa-car"></i> Quản lý xe
+                    </a>
+                </li>
+                <li>
+                    <a onclick="showSection('settings')">
+                        <i class="fas fa-cog"></i> Cài đặt
+                    </a>
+                </li>
+                <li>
+                    <a onclick="doLogout()">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- DASHBOARD -->
+            <div class="section active" id="dashboard">
+                <div class="top-bar">
+                    <h1><i class="fas fa-chart-line" style="color: var(--taxi-orange);"></i> Tổng quan</h1>
+                    <div class="top-bar-actions">
+                        <button class="refresh-btn" id="refreshBtn" onclick="loadAllData()">
+                            <i class="fas fa-sync-alt"></i> Làm mới
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div>
+                            <div class="stat-value" id="statTotal">0</div>
+                            <div class="stat-label">Tổng đơn hàng</div>
+                        </div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                        <div>
+                            <div class="stat-value" id="statPending">0</div>
+                            <div class="stat-label">Chờ xác nhận</div>
+                        </div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                        <div>
+                            <div class="stat-value" id="statDone">0</div>
+                            <div class="stat-label">Hoàn thành</div>
+                        </div>
+                    </div>
+                    <div class="stat-card info">
+                        <div class="stat-icon"><i class="fas fa-car"></i></div>
+                        <div>
+                            <div class="stat-value" id="statCars">0</div>
+                            <div class="stat-label">Xe sẵn sàng</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-list" style="color: var(--taxi-orange);"></i> Đơn mới nhất</h3>
+                    </div>
+                    <div class="card-body">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Khách hàng</th>
+                                    <th>SĐT</th>
+                                    <th>Loại xe</th>
+                                    <th>Ngày đi</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentBookings"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOOKINGS -->
+            <div class="section" id="bookings">
+                <div class="top-bar">
+                    <h1><i class="fas fa-calendar-check" style="color: var(--taxi-orange);"></i> Đơn đặt xe</h1>
+                    <div class="top-bar-actions">
+                        <button class="refresh-btn" onclick="loadBookings()">
+                            <i class="fas fa-sync-alt"></i> Làm mới
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <input type="text" id="searchPhone" placeholder="🔍 Tìm theo SĐT..." oninput="filterBookings()">
+                    <select id="filterStatus" onchange="filterBookings()">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="Mới">Mới</option>
+                        <option value="Đã xác nhận">Đã xác nhận</option>
+                        <option value="Đang đón">Đang đón</option>
+                        <option value="Thuê Xe">Thuê Xe</option>
+                        <option value="Hoàn thành">Hoàn thành</option>
+                        <option value="Hủy">Hủy</option>
+                    </select>
+                    <input type="date" id="filterDate" onchange="filterBookings()">
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Thờigian đặt</th>
+                                    <th>Họ tên</th>
+                                    <th>SĐT</th>
+                                    <th>Email</th>
+                                    <th>Loại xe</th>
+                                    <th>Ngày đi</th>
+                                    <th>Giờ đón</th>
+                                    <th>Điểm đón</th>
+                                    <th>Điểm đến</th>
+                                    <th>Ghi chú</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allBookings"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FLEET -->
+            <div class="section" id="fleet">
+                <div class="top-bar">
+                    <h1><i class="fas fa-car" style="color: var(--taxi-orange);"></i> Quản lý xe</h1>
+                    <div class="top-bar-actions">
+                        <button class="refresh-btn" onclick="loadFleet()">
+                            <i class="fas fa-sync-alt"></i> Làm mới
+                        </button>
+                    </div>
+                </div>
+
+                <div class="fleet-grid" id="fleetGrid">
+                    <!-- JS render -->
+                </div>
+            </div>
+
+            <!-- SETTINGS -->
+            <div class="section" id="settings">
+                <div class="top-bar">
+                    <h1><i class="fas fa-cog" style="color: var(--taxi-orange);"></i> Cài đặt</h1>
+                </div>
+
+                <div class="card" style="max-width: 600px;">
+                    <div class="card-header">
+                        <h3><i class="fas fa-link" style="color: var(--taxi-orange);"></i> Kết nối Google Apps Script</h3>
+                    </div>
+                    <div class="card-body" style="padding: 1.5rem;">
+                        <div class="modal-row">
+                            <label>GAS URL</label>
+                            <input type="text" id="gasUrl" placeholder="https://script.google.com/macros/s/.../exec" value="https://script.google.com/macros/s/AKfycbxxV3SqxshFOH0moepS4-C7DElz5926SJW0_VOQU9QY38Cjz2XC8Dg4EtCcEcsLbPoK/exec">
+                        </div>
+                        <div class="modal-row">
+                            <label>Tên đăng nhập Admin</label>
+                            <input type="text" id="adminUserSetting" value="admin">
+                        </div>
+                        <div class="modal-row">
+                            <label>Mật khẩu Admin</label>
+                            <input type="text" id="adminPassSetting" value="Hoangkim79$">
+                        </div>
+                        <button class="fleet-save" onclick="saveSettings()" style="margin-top: 1rem;">
+                            <i class="fas fa-save"></i> Lưu cài đặt
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">Thành công!</span></div>
+
+    <!-- MODAL EDIT -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h3><i class="fas fa-edit" style="color: var(--taxi-orange);"></i> Cập nhật đơn hàng</h3>
+            <div class="modal-row">
+                <label>Mã đơn</label>
+                <input type="text" id="editId" readonly>
+            </div>
+            <div class="modal-row">
+                <label>Trạng thái</label>
+                <select id="editStatus">
+                    <option value="Mới">Mới</option>
+                    <option value="Đã xác nhận">Đã xác nhận</option>
+                    <option value="Đang đón">Đang đón</option>
+                    <option value="Hoàn thành">Hoàn thành</option>
+                    <option value="Hủy">Hủy</option>
+                </select>
+            </div>
+            <div class="modal-row">
+                <label>Tài xế / Ghi chú</label>
+                <textarea id="editNote" rows="3"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-save" onclick="saveEdit()"><i class="fas fa-save"></i> Lưu</button>
+                <button class="modal-cancel" onclick="closeModal()">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== CONFIG ==========
+        const DEFAULT_PASS = 'Hoangkim79$';
+        let GAS_URL = localStorage.getItem('gasUrl') || 'https://script.google.com/macros/s/AKfycbxoeJwCAVkPomz1uH8ePgypBP1ioW1AjWz-RCShXIWaaMpXuadXBuhBznlBK45mBGnT/exec';
+        let allBookingsData = [];
+        let fleetData = [];
+
+        // ========== LOGIN ==========
+        function doLogin() {
+            const user = document.getElementById('adminUser').value.trim();
+            const pass = document.getElementById('adminPass').value;
+            const savedUser = localStorage.getItem('adminUser') || 'admin';
+            const savedPass = localStorage.getItem('adminPass') || DEFAULT_PASS;
+            if (user === savedUser && pass === savedPass) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                loadAllData();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+        function doLogout() {
+            location.reload();
+        }
+        document.getElementById('adminPass').addEventListener('keypress', e => {
+            if (e.key === 'Enter') doLogin();
+        });
+
+        // ========== NAVIGATION ==========
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // ========== TOAST ==========
+        function showToast(msg) {
+            document.getElementById('toastMsg').textContent = msg;
+            const t = document.getElementById('toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ========== LOAD DATA ==========
+        async function loadAllData() {
+            const btn = document.getElementById('refreshBtn');
+            btn.classList.add('spin');
+            await Promise.all([loadBookings(), loadFleet()]);
+            btn.classList.remove('spin');
+            updateDashboard();
+        }
+
+        // ========== BOOKINGS ==========
+        async function loadBookings() {
+            try {
+                const res = await fetch(GAS_URL + '?action=getBookings');
+                const data = await res.json();
+                allBookingsData = data.bookings || [];
+                renderBookings(allBookingsData);
+            } catch (e) {
+                console.error('Load bookings error:', e);
+                showToast('Lỗi tải dữ liệu!');
+            }
+        }
+
+        function renderBookings(list) {
+            const tbody = document.getElementById('allBookings');
+            const recent = document.getElementById('recentBookings');
+
+            tbody.innerHTML = list.map(b => `
+                        <tr>
+                            <td><strong>${b[0]}</strong></td>
+                            <td>${b[1]}</td>
+                            <td>${b[2]}</td>
+                            <td><a href="tel:${b[3]}" style="color: var(--taxi-orange);">${b[3]}</a></td>
+                            <td>${b[4]}</td>
+                            <td>${b[5]}</td>
+                            <td>${b[6]}</td>
+                            <td>${b[7]}</td>
+                            <td>${b[8]}</td>
+                            <td>${b[9]}</td>
+                            <td>${b[10] || ''}</td>
+                            <td>${statusBadge(b[11])}</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="btn-icon btn-edit" onclick="openEdit('${b[0]}', '${b[11]}', '${(b[12] || '').replace(/'/g, "\'")}')" title="Sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-icon btn-done" onclick="quickStatus('${b[0]}', 'Hoàn thành')" title="Hoàn thành">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="btn-icon btn-cancel" onclick="quickStatus('${b[0]}', 'Hủy')" title="Hủy">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+
+            // Recent bookings (last 5)
+            const last5 = list.slice(0, 5);
+            recent.innerHTML = last5.map(b => `
+                        <tr>
+                            <td><strong>${b[0]}</strong></td>
+                            <td>${b[2]}</td>
+                            <td><a href="tel:${b[3]}" style="color: var(--taxi-orange);">${b[3]}</a></td>
+                            <td>${b[5]}</td>
+                            <td>${b[6]}</td>
+                            <td>${statusBadge(b[11])}</td>
+                        </tr>
+                    `).join('');
+        }
+
+        function statusBadge(st) {
+            const map = {
+                'Mới': 'status-moi',
+                'Đã xác nhận': 'status-xacnhan',
+                'Đang đón': 'status-dangdon',
+                'Thuê Xe': 'status-thuexe',
+                'Hoàn thành': 'status-hoanthanh',
+                'Hủy': 'status-huy'
+            };
+            return `<span class="badge-status ${map[st] || 'status-moi'}">${st || 'Mới'}</span>`;
+        }
+
+        function filterBookings() {
+            const phone = document.getElementById('searchPhone').value.toLowerCase();
+            const status = document.getElementById('filterStatus').value;
+            const date = document.getElementById('filterDate').value;
+
+            const filtered = allBookingsData.filter(b => {
+                const matchPhone = !phone || (b[3] && b[3].includes(phone));
+                const matchStatus = !status || b[11] === status;
+                const matchDate = !date || (b[6] && b[6].includes(date));
+                return matchPhone && matchStatus && matchDate;
+            });
+            renderBookings(filtered);
+        }
+
+        // ========== EDIT ==========
+        let editingId = '';
+        function openEdit(id, status, note) {
+            editingId = id;
+            document.getElementById('editId').value = id;
+            document.getElementById('editStatus').value = status || 'Mới';
+            document.getElementById('editNote').value = note || '';
+            document.getElementById('editModal').classList.add('show');
+        }
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('show');
+        }
+        async function saveEdit() {
+            const status = document.getElementById('editStatus').value;
+            const note = document.getElementById('editNote').value;
+
+            const params = new URLSearchParams();
+            params.append('action', 'updateStatus');
+            params.append('id', editingId);
+            params.append('status', status);
+            params.append('note', note);
+
+            try {
+                await fetch(GAS_URL, { method: 'POST', body: params });
+                showToast('Cập nhật thành công!');
+                closeModal();
+                loadBookings();
+            } catch (e) {
+                showToast('Lỗi cập nhật!');
+            }
+        }
+        async function quickStatus(id, status) {
+            if (!confirm('Đổi trạng thái thành "' + status + '"?')) return;
+            const params = new URLSearchParams();
+            params.append('action', 'updateStatus');
+            params.append('id', id);
+            params.append('status', status);
+            params.append('note', '');
+
+            try {
+                await fetch(GAS_URL, { method: 'POST', body: params });
+                showToast('Đã cập nhật!');
+                loadBookings();
+            } catch (e) {
+                showToast('Lỗi!');
+            }
+        }
+
+        // ========== FLEET ==========
+        async function loadFleet() {
+            const defaultFleet = [
+                { id: 'VF3', name: 'VinFast VF 3', seats: '4 chỗ', total: 2, status: 'Sẵn sàng', maintenance: 0, rented: 0 },
+                { id: 'VF5', name: 'VinFast VF 5 Plus', seats: '5 chỗ', total: 3, status: 'Sẵn sàng', maintenance: 0, rented: 0 },
+                { id: 'VF6', name: 'VinFast VF 6', seats: '5 chỗ', total: 2, status: 'Sẵn sàng', maintenance: 0, rented: 0 },
+                { id: 'VF7', name: 'VinFast VF 7', seats: '5 chỗ', total: 1, status: 'Sẵn sàng', maintenance: 0, rented: 0 },
+                { id: 'VF8', name: 'VinFast VF 8', seats: '5 chỗ', total: 1, status: 'Sẵn sàng', maintenance: 0, rented: 0 },
+                { id: 'VF9', name: 'VinFast VF 9', seats: '6-7 chỗ', total: 1, status: 'Sẵn sàng', maintenance: 0, rented: 0 },
+                { id: 'VFe34', name: 'VinFast VF e34', seats: '5 chỗ', total: 2, status: 'Sẵn sàng', maintenance: 0, rented: 0 },
+                { id: 'MINIO', name: 'MINIO GREEN', seats: '4 chỗ', total: 1, status: 'Sẵn sàng', maintenance: 0, rented: 0 },
+                { id: 'LIMO', name: 'LIMO GREEN', seats: '9 chỗ', total: 1, status: 'Sẵn sàng', maintenance: 0, rented: 0 },
+                { id: 'VANEC', name: 'VAN EC', seats: 'Chở hàng', total: 1, status: 'Sẵn sàng', maintenance: 0, rented: 0 },
+                { id: 'HERIO', name: 'Herio Green', seats: '5 chỗ', total: 1, status: 'Sẵn sàng', maintenance: 0, rented: 0 },
+                { id: 'NERIO', name: 'NERIO GREEN', seats: '5 chỗ', total: 1, status: 'Sẵn sàng', maintenance: 0, rented: 0 }
+            ];
+
+            const saved = localStorage.getItem('fleetData');
+            fleetData = saved ? JSON.parse(saved) : defaultFleet;
+            renderFleet();
+        }
+
+        function renderFleet() {
+            const grid = document.getElementById('fleetGrid');
+            grid.innerHTML = fleetData.map((car, i) => {
+                // Tính số xe sẵn sàng
+                const used = (car.status === 'Sẵn sàng' ? 0 : car.qty) + car.maintenance + car.rented;
+                const ready = Math.max(0, car.total - used);
+
+                const showExtra = car.status === 'Bảo trì' || car.status === 'Thuê Xe';
+
+                return `
+                        <div class="fleet-card">
+                            <h4>${car.name}</h4>
+                            <div class="seats">🪑 ${car.seats}</div>
+
+                            <div class="modal-row">
+                                <label>Tổng số xe</label>
+                                <input type="number" class="fleet-input" id="total_${i}" value="${car.total}" min="0">
+                            </div>
+
+                            <div class="modal-row">
+                                <label>Trạng thái</label>
+                                <select class="fleet-input" id="status_${i}" onchange="onStatusChange(${i})">
+                                    <option value="Sẵn sàng" ${car.status === 'Sẵn sàng' ? 'selected' : ''}>Sẵn sàng</option>
+                                    <option value="Đang chạy" ${car.status === 'Đang chạy' ? 'selected' : ''}>Đang chạy</option>
+                                    <option value="Bảo trì" ${car.status === 'Bảo trì' ? 'selected' : ''}>Bảo trì</option>
+                                    <option value="Thuê Xe" ${car.status === 'Thuê Xe' ? 'selected' : ''}>Thuê Xe</option>
+                                    <option value="Hết xe" ${car.status === 'Hết xe' ? 'selected' : ''}>Hết xe</option>
+                                </select>
+                            </div>
+
+                            <div class="modal-row" id="maintRow_${i}" style="display:${car.status === 'Bảo trì' ? 'block' : 'none'};">
+                                <label>🔧 Số xe bảo trì</label>
+                                <input type="number" class="fleet-input" id="maintenance_${i}" value="${car.maintenance}" min="0" max="${car.total}">
+                            </div>
+
+                            <div class="modal-row" id="rentRow_${i}" style="display:${car.status === 'Thuê Xe' ? 'block' : 'none'};">
+                                <label>🔑 Số xe cho thuê</label>
+                                <input type="number" class="fleet-input" id="rented_${i}" value="${car.rented}" min="0" max="${car.total}">
+                            </div>
+
+                            <div style="margin:10px 0;padding:10px;background:#f8f9fa;border-radius:8px;font-size:13px;">
+                                <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                                    <span style="color:#28a745;font-weight:700">✅ Sẵn sàng: ${ready || 0}</span>
+                                    <span style="color:#666">Tổng: ${car.total || 0}</span>
+                                </div>
+                                ${car.status === 'Đang chạy' && car.qty > 0 ? `<div style="color:#ffc107;font-size:12px;">🚗 Đang chạy: ${car.qty}</div>` : ''}
+                                ${car.status === 'Bảo trì' && car.maintenance > 0 ? `<div style="color:#6c757d;font-size:12px;">🔧 Bảo trì: ${car.maintenance}</div>` : ''}
+                                ${car.status === 'Thuê Xe' && car.rented > 0 ? `<div style="color:#7B1FA2;font-size:12px;">🔑 Thuê Xe: ${car.rented}</div>` : ''}
+                            </div>
+
+                            <button class="fleet-save" onclick="saveFleet(${i})">
+                                <i class="fas fa-save"></i> Lưu
+                            </button>
+                        </div>
+                    `}).join('');
+
+            const readyTotal = fleetData.reduce((sum, c) => {
+                const used = (c.status === 'Sẵn sàng' ? 0 : c.qty) + c.maintenance + c.rented;
+                return sum + Math.max(0, c.total - used);
+            }, 0);
+            document.getElementById('statCars').textContent = readyTotal;
+        }
+
+        function onStatusChange(index) {
+            const status = document.getElementById('status_' + index).value;
+            const maintRow = document.getElementById('maintRow_' + index);
+            const rentRow = document.getElementById('rentRow_' + index);
+
+            // Ẩn tất cả trước
+            maintRow.style.display = 'none';
+            rentRow.style.display = 'none';
+
+            // Chỉ hiện ô tương ứng
+            if (status === 'Bảo trì') {
+                maintRow.style.display = 'block';
+            } else if (status === 'Thuê Xe') {
+                rentRow.style.display = 'block';
+            }
+            // Sẵn sàng / Hết xe / Đang chạy → không hiện ô nào
+        }
+
+        function saveFleet(index) {
+            const car = fleetData[index];
+            car.total = parseInt(document.getElementById('total_' + index).value) || 0;
+            car.status = document.getElementById('status_' + index).value;
+
+            // Reset
+            car.maintenance = 0;
+            car.rented = 0;
+
+            // Chỉ lấy giá trị ô đang hiện
+            if (car.status === 'Bảo trì') {
+                car.maintenance = parseInt(document.getElementById('maintenance_' + index)?.value) || 0;
+            } else if (car.status === 'Thuê Xe') {
+                car.rented = parseInt(document.getElementById('rented_' + index)?.value) || 0;
+            }
+
+            // Validate
+            const used = car.maintenance + car.rented;
+            if (used > car.total) {
+                showToast('⚠️ Tổng xe sử dụng vượt quá tổng!');
+                return;
+            }
+
+            localStorage.setItem('fleetData', JSON.stringify(fleetData));
+            renderFleet();
+            showToast('Đã cập nhật xe!');
+        }
+
+        // ========== DASHBOARD ==========
+        function updateDashboard() {
+            document.getElementById('statTotal').textContent = allBookingsData.length;
+            document.getElementById('statPending').textContent = allBookingsData.filter(b => b[11] === 'Mới').length;
+            document.getElementById('statDone').textContent = allBookingsData.filter(b => b[11] === 'Hoàn thành').length;
+        }
+
+        // ========== SETTINGS ==========
+        function saveSettings() {
+            GAS_URL = document.getElementById('gasUrl').value;
+            const newUser = document.getElementById('adminUserSetting').value;
+            const newPass = document.getElementById('adminPassSetting').value;
+            localStorage.setItem('gasUrl', GAS_URL);
+            localStorage.setItem('adminUser', newUser);
+            localStorage.setItem('adminPass', newPass);
+            showToast('Đã lưu cài đặt!');
+        }
+
+        // Load settings
+        document.getElementById('gasUrl').value = GAS_URL;
+        const savedUser = localStorage.getItem('adminUser');
+        if (savedUser) document.getElementById('adminUserSetting').value = savedUser;
+        const savedPass = localStorage.getItem('adminPass');
+        if (savedPass) document.getElementById('adminPassSetting').value = savedPass;
+    </script>
+</body>
+</html>
